@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TYPE TO DESTROY: INFINITE GOD MODE</title>
+<style>
+:root{color-scheme:dark;--bg:#090b16;--panel:#14182b;--panel2:#1b2140;--pink:#ff3e9d;--cyan:#52e5ff;--gold:#ffd166;--text:#f5f7ff;--muted:#aab1d0}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 0,#25234b 0,#090b16 58%);color:var(--text);font-family:system-ui,Segoe UI,Arial,sans-serif;padding:24px}
+main{max-width:980px;margin:auto}.hero{text-align:center;margin:10px 0 24px}.tag{color:var(--cyan);font-weight:800;letter-spacing:.18em;font-size:.75rem}.hero h1{font-size:clamp(2rem,6vw,4rem);line-height:1.02;margin:10px 0;text-shadow:0 0 25px #ff3e9d66}.hero p{color:var(--muted);margin:0}
+.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}.panel{background:linear-gradient(145deg,#1a1e36,#111426);border:1px solid #ffffff18;border-radius:20px;padding:20px;box-shadow:0 15px 40px #0005}.dummy{text-align:center;min-height:290px;display:flex;flex-direction:column;justify-content:center;align-items:center}.dummy-face{font-size:100px;filter:drop-shadow(0 0 20px #ff3e9d55);animation:bob 2s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-9px)}}.dummy h2{margin:8px 0 4px}.hp{font-size:1.25rem;font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums}.bar{height:16px;width:min(100%,440px);background:#070914;border-radius:20px;overflow:hidden;margin:12px 0}.fill{height:100%;width:100%;background:linear-gradient(90deg,var(--pink),#ff9a5c);transition:width .12s}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.stat{background:#ffffff08;border-radius:12px;padding:12px}.stat small{display:block;color:var(--muted)}.stat strong{font-size:1.15rem;overflow-wrap:anywhere}
+.actions{display:grid;gap:12px}.btn{border:0;border-radius:13px;padding:14px 16px;font-weight:900;font-size:1rem;cursor:pointer;color:#090b16;background:linear-gradient(90deg,var(--cyan),#a1f5ff);box-shadow:0 5px 18px #52e5ff22}.btn.pink{background:linear-gradient(90deg,var(--pink),#ff9bc9);color:white}.btn.gold{background:linear-gradient(90deg,var(--gold),#fff0a8)}.btn:disabled{opacity:.45;cursor:not-allowed}.upgrade{background:#ffffff09;border:1px solid #ffffff12;border-radius:14px;padding:14px}.upgrade h3{margin:0 0 5px}.upgrade p{margin:0 0 10px;color:var(--muted);font-size:.9rem}.upgrade .btn{width:100%;padding:11px}.toggle{display:flex;align-items:center;justify-content:space-between;gap:10px}.toggle select{background:#090b16;color:white;border:1px solid #ffffff33;padding:9px;border-radius:9px}.feed{margin-top:16px;color:var(--muted);font-size:.88rem;min-height:1.4em;text-align:center}.hint{text-align:center;color:var(--muted);font-size:.85rem;margin-top:14px}
+@media(max-width:720px){body{padding:14px}.grid{grid-template-columns:1fr}.dummy{min-height:230px}.dummy-face{font-size:78px}}
+</style>
+</head>
+<body>
+<main>
+  <header class="hero">
+    <div class="tag">THE ENDLESS DAMAGE EXPERIMENT</div>
+    <h1>TYPE TO DESTROY<br>INFINITE GOD MODE</h1>
+    <p>Every key is a hit. Every defeat makes the next dummy 50× tougher.</p>
+  </header>
+  <div class="grid">
+    <section class="panel">
+      <div class="dummy">
+        <div class="dummy-face" id="face">🤖</div>
+        <h2 id="dummyName">Training Dummy #1</h2>
+        <div class="hp"><span id="hp">100</span> HP</div>
+        <div class="bar"><div class="fill" id="bar"></div></div>
+        <div class="stats">
+          <div class="stat"><small>Manual power / key</small><strong id="power">1</strong></div>
+          <div class="stat"><small>Auto power / hit</small><strong id="autoPower">1</strong></div>
+          <div class="stat"><small>Total hits</small><strong id="hits">0</strong></div>
+          <div class="stat"><small>Dummies defeated</small><strong id="wins">0</strong></div>
+        </div>
+      </div>
+      <button class="btn pink" id="attack">💥 ATTACK! (or type anywhere)</button>
+      <div class="feed" id="feed" aria-live="polite">Ready? Smash your keyboard!</div>
+      <div class="hint">Tip: type letters or numbers while this page is focused. Don't type inside a menu.</div>
+    </section>
+    <aside class="panel actions">
+      <div class="upgrade">
+        <h3>🚀 Manual Power Upgrade</h3>
+        <p>Multiply your damage per key by 50.</p>
+        <button class="btn" id="upgradeManual">UPGRADE ×50</button>
+      </div>
+      <div class="upgrade">
+        <h3>⚡ Auto Power Upgrade</h3>
+        <p>Multiply damage per automatic hit by 50.</p>
+        <button class="btn gold" id="upgradeAuto">UPGRADE AUTO ×50</button>
+      </div>
+      <div class="upgrade">
+        <h3>🤖 Auto Clicker</h3>
+        <p>Automatic hits are batched efficiently, so high hit rates don't freeze the page.</p>
+        <div class="toggle">
+          <button class="btn pink" id="autoToggle">START AUTO</button>
+          <select id="rate" aria-label="Automatic hits per second">
+            <option value="1">1 hit/sec</option>
+            <option value="100">100 hits/sec</option>
+            <option value="500">500 hits/sec</option>
+            <option value="1000">1,000 hits/sec</option>
+            <option value="5000" selected>5,000 hits/sec</option>
+            <option value="10000">10,000 hits/sec</option>
+            <option value="50000">50,000 hits/sec</option>
+          </select>
+        </div>
+      </div>
+      <div class="upgrade">
+        <h3>📊 Game controls</h3>
+        <p>Start fresh whenever you want.</p>
+        <button class="btn" id="reset">RESET GAME</button>
+      </div>
+    </aside>
+  </div>
+</main>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const big = n => n.toLocaleString('en-US');
+  const FIFTY = 50n;
+  let hp = 100n, maxHp = 100n, manualPower = 1n, autoPower = 1n;
+  let hits = 0n, defeats = 0n, totalDamage = 0n;
+  let autoOn = false, lastTick = performance.now(), fractionalHits = 0;
+
+  function damageWithHits(hitCount, power, source) {
+    if (hitCount <= 0n) return;
+    hits += hitCount;
+    let damage = hitCount * power;
+    totalDamage += damage;
+    while (damage >= hp) {
+      damage -= hp;
+      defeats++;
+      hp = hp * FIFTY;
+      maxHp = hp;
+    }
+    hp -= damage;
+    $('feed').textContent = source + ': ' + big(hitCount) + ' hits dealt ' + big(hitCount * power) + ' damage!';
+    render();
+  }
+  function render() {
+    $('hp').textContent = big(hp);
+    $('power').textContent = big(manualPower);
+    $('autoPower').textContent = big(autoPower);
+    $('hits').textContent = big(hits);
+    $('wins').textContent = big(defeats);
+    $('dummyName').textContent = 'Training Dummy #' + big(defeats + 1n);
+    const pct = Number((hp * 10000n) / maxHp) / 100;
+    $('bar').style.width = Math.max(0, Math.min(100, pct)) + '%';
+    $('upgradeManual').textContent = 'UPGRADE ×50  |  Next power: ' + big(manualPower * FIFTY);
+    $('upgradeAuto').textContent = 'UPGRADE AUTO ×50  |  Next power: ' + big(autoPower * FIFTY);
+    $('autoToggle').textContent = autoOn ? 'STOP AUTO' : 'START AUTO';
+  }
+  function manualHit() { damageWithHits(1n, manualPower, 'Manual attack'); }
+  $('attack').addEventListener('click', manualHit);
+  $('upgradeManual').addEventListener('click', () => { manualPower *= FIFTY; render(); $('feed').textContent = 'Manual power multiplied by 50!'; });
+  $('upgradeAuto').addEventListener('click', () => { autoPower *= FIFTY; render(); $('feed').textContent = 'Auto power multiplied by 50!'; });
+  $('autoToggle').addEventListener('click', () => { autoOn = !autoOn; lastTick = performance.now(); fractionalHits = 0; render(); $('feed').textContent = autoOn ? 'AUTO CLICKER ACTIVATED!' : 'Auto clicker stopped.'; });
+  $('rate').addEventListener('change', () => { lastTick = performance.now(); fractionalHits = 0; });
+  $('reset').addEventListener('click', () => {
+    hp = maxHp = 100n; manualPower = autoPower = 1n; hits = defeats = totalDamage = 0n;
+    autoOn = false; fractionalHits = 0; lastTick = performance.now();
+    $('feed').textContent = 'Fresh start. Go destroy something!'; render();
+  });
+  window.addEventListener('keydown', e => {
+    if (e.repeat || e.ctrlKey || e.altKey || e.metaKey) return;
+    const tag = e.target && e.target.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || tag === 'BUTTON') return;
+    if (e.key.length === 1) manualHit();
+  });
+  function loop(now) {
+    const elapsed = Math.min(250, now - lastTick);
+    lastTick = now;
+    if (autoOn && elapsed > 0) {
+      const rate = Number($('rate').value);
+      fractionalHits += rate * elapsed / 1000;
+      const wholeHits = Math.floor(fractionalHits);
+      if (wholeHits > 0) {
+        fractionalHits -= wholeHits;
+        damageWithHits(BigInt(wholeHits), autoPower, 'Auto clicker');
+      }
+    }
+    requestAnimationFrame(loop);
+  }
+  render();
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
